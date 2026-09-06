@@ -1,5 +1,5 @@
-// Replace 'song.mp3' with your actual audio file name
 const audio = new Audio('song.mp3'); 
+audio.loop = true;
 
 document.getElementById('musicBtn').addEventListener('click', function() {
   if (audio.paused) {
