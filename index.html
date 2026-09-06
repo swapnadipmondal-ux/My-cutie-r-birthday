@@ -35,8 +35,16 @@ body {
     background: var(--ink);
     color: var(--ivory);
     font-family: "Cormorant Garamond", serif;
-    user-select: none;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+    }
+}
+
 
 /* =====================================================
    SCREENS
@@ -52,8 +60,8 @@ body {
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1.1s ease, transform 1.2s cubic-bezier(.2,.7,.2,1);
-    transform: scale(1.04);
+    transition: opacity 1.3s ease, transform 1.6s cubic-bezier(.2,.7,.2,1);
+    transform: scale(1.06);
     overflow: hidden;
     padding: 20px;
 }
@@ -64,8 +72,9 @@ body {
     transform: scale(1);
 }
 
+
 /* =====================================================
-   BACKGROUND
+   BACKGROUND — a slow, moving dusk
 ===================================================== */
 
 .background {
@@ -77,11 +86,24 @@ body {
         linear-gradient(160deg, var(--plum) 0%, var(--ink) 65%);
 }
 
+.background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 90% 80% at 50% 50%, transparent 40%, rgba(0,0,0,.55) 100%);
+}
+
+
+/* =====================================================
+   DRIFTING WINGS (fine, faint, in the far background)
+===================================================== */
+
 .wingfield {
     position: absolute;
     inset: 0;
     opacity: .35;
-    background-image: radial-gradient(circle, rgba(215,168,95,.5) 1px, transparent 1.4px);
+    background-image:
+        radial-gradient(circle, rgba(215,168,95,.5) 1px, transparent 1.4px);
     background-size: 90px 90px;
     animation: driftField 40s linear infinite;
 }
@@ -91,10 +113,30 @@ body {
     to   { background-position: 200px 300px; }
 }
 
+
+/* =====================================================
+   GRAIN
+===================================================== */
+
+.grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .05;
+    z-index: 50;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
 .content {
     position: relative;
     z-index: 10;
-    width: min(880px, 92vw);
+    width: min(920px, 92vw);
     max-height: 92vh;
     overflow-y: auto;
     text-align: center;
@@ -102,74 +144,119 @@ body {
 }
 .content::-webkit-scrollbar { display: none; }
 
+
+/* =====================================================
+   CHAPTER MARK — a quiet signature, not a tracked label
+===================================================== */
+
 .mark {
     font-style: italic;
+    font-weight: 400;
     font-size: 18px;
+    letter-spacing: .5px;
     color: var(--gold);
     opacity: .85;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
-.mark::before { content: "✦  "; color: var(--gold-dim); }
+
+.mark::before {
+    content: "✦  ";
+    color: var(--gold-dim);
+}
+
+
+/* =====================================================
+   TITLES
+===================================================== */
 
 .title {
     font-family: "Great Vibes", cursive;
-    font-size: clamp(60px, 12vw, 130px);
+    font-size: clamp(64px, 13vw, 148px);
+    font-weight: 400;
+    line-height: .95;
     color: var(--rose);
-    text-shadow: 0 0 35px rgba(233,184,207,.35);
+    text-shadow: 0 0 40px rgba(233,184,207,.35);
 }
 
 .serif {
     font-family: "Cormorant Garamond", serif;
-    font-size: clamp(30px, 5vw, 52px);
+    font-size: clamp(32px, 5.5vw, 58px);
+    font-weight: 500;
     font-style: italic;
+    line-height: 1.15;
     color: var(--ivory);
 }
 
+
+/* =====================================================
+   TYPEWRITER TEXT
+===================================================== */
+
 .typewriter {
-    font-size: clamp(20px, 3.2vw, 30px);
-    min-height: 50px;
+    font-size: clamp(21px, 3.4vw, 34px);
+    min-height: 56px;
     color: var(--ivory-70);
-    margin: 18px auto 6px;
+    margin: 22px auto 6px;
     max-width: 760px;
     line-height: 1.5;
 }
+
+
+/* =====================================================
+   FLOURISH DIVIDER — the one bespoke motif, used sparingly
+===================================================== */
+
+.flourish {
+    width: 220px;
+    height: 34px;
+    margin: 22px auto;
+    opacity: .8;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
 
 .btn {
     border: 1px solid rgba(215,168,95,.45);
     background: rgba(215,168,95,.06);
     color: var(--ivory);
-    padding: 13px 32px;
+    padding: 15px 34px;
     border-radius: 2px;
     font-family: "Cormorant Garamond", serif;
     font-style: italic;
     font-size: 18px;
+    letter-spacing: .5px;
     cursor: pointer;
     backdrop-filter: blur(10px);
     transition: .35s ease;
-    margin-top: 22px;
-    display: inline-block;
+    margin-top: 28px;
 }
 
-.btn:hover {
+.btn:hover, .btn:focus-visible {
     background: var(--gold);
     color: var(--ink);
     border-color: var(--gold);
     transform: translateY(-2px);
-    box-shadow: 0 15px 35px rgba(215,168,95,.25);
+    box-shadow: 0 18px 40px rgba(215,168,95,.25);
 }
+
+.btn:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+
 
 /* =====================================================
    PHOTO FRAME
 ===================================================== */
 
 .photo-frame {
-    width: min(310px, 72vw);
-    height: min(400px, 50vh);
-    margin: 18px auto;
+    width: min(320px, 74vw);
+    height: min(420px, 52vh);
+    margin: 22px auto;
     overflow: hidden;
     position: relative;
     border: 1px solid rgba(215,168,95,.4);
-    box-shadow: 0 25px 60px rgba(0,0,0,.8);
+    box-shadow: 0 30px 70px rgba(0,0,0,.75);
     transform: rotate(-1.5deg);
     animation: photoFloat 6s ease-in-out infinite;
 }
@@ -178,51 +265,143 @@ body {
     50% { transform: rotate(1.5deg) translateY(-8px); }
 }
 
+.photo-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 50px rgba(0,0,0,.5);
+    pointer-events: none;
+}
+
 .photo-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: saturate(.92) contrast(1.03);
 }
 
 .photo-caption {
     font-family: "Great Vibes", cursive;
-    font-size: 32px;
+    font-size: 34px;
     color: var(--rose);
-    margin-top: 10px;
+    margin-top: 14px;
 }
 
+
 /* =====================================================
-   BOW & ARROW GAME
+   MEMORY GRID
+===================================================== */
+
+.memories {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 26px;
+}
+
+.memory {
+    background: rgba(215,168,95,.04);
+    border: 1px solid rgba(215,168,95,.18);
+    overflow: hidden;
+    transition: .4s ease;
+}
+
+.memory:nth-child(2) { border-color: rgba(233,184,207,.22); }
+
+.memory:hover { transform: translateY(-6px); border-color: var(--gold); }
+
+.memory img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    filter: saturate(.92);
+}
+
+.memory-text {
+    padding: 14px;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ivory-70);
+}
+
+
+/* =====================================================
+   LETTER
+===================================================== */
+
+.letter {
+    max-width: 720px;
+    margin: 26px auto;
+    padding: 38px 40px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(215,168,95,.22);
+    border-left: 2px solid var(--gold);
+    text-align: left;
+    font-size: clamp(19px, 2.4vw, 26px);
+    line-height: 1.75;
+    color: var(--ivory);
+}
+
+
+/* =====================================================
+   CUPID'S ARROW GAME
 ===================================================== */
 
 .game-stage {
     position: relative;
     width: min(480px, 88vw);
     height: 150px;
-    margin: 25px auto 10px;
+    margin: 30px auto 8px;
 }
 
 .bow {
     position: absolute;
-    left: 10px;
+    left: 6px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: clamp(40px, 8vw, 56px);
+    font-size: clamp(38px, 8vw, 52px);
     cursor: pointer;
-    transition: transform .2s ease;
+    transition: transform .2s ease, filter .2s ease;
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,.4));
+    transform-origin: 60% 50%;
 }
 
-.bow:hover { transform: translateY(-50%) scale(1.1) rotate(-8deg); }
-.bow.spent { opacity: .5; cursor: default; }
+.bow:hover, .bow:focus-visible {
+    transform: translateY(-50%) scale(1.1) rotate(-8deg);
+}
+.bow:focus-visible { outline: 2px solid var(--rose); outline-offset: 4px; }
+
+.bow.spent { opacity: .55; cursor: default; }
+
+.bow.aiming {
+    animation: bowAim .28s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes bowAim {
+    0%   { transform: translateY(-50%) scale(1) rotate(0deg) translateX(0); }
+    100% { transform: translateY(-50%) scale(.88) rotate(-16deg) translateX(-10px); }
+}
+
+.bow.recoil {
+    animation: bowRecoil .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes bowRecoil {
+    0%   { transform: translateY(-50%) scale(.88) rotate(-16deg) translateX(-10px); }
+    35%  { transform: translateY(-50%) scale(1.22) rotate(12deg) translateX(8px); }
+    65%  { transform: translateY(-50%) scale(.94) rotate(-4deg) translateX(-2px); }
+    100% { transform: translateY(-50%) scale(1) rotate(0deg) translateX(0); }
+}
 
 .target {
     position: absolute;
-    right: 10px;
+    right: 6px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: clamp(42px, 8.5vw, 58px);
+    font-size: clamp(40px, 8.5vw, 56px);
     animation: heartPulse 1.7s ease-in-out infinite;
+    filter: drop-shadow(0 0 14px rgba(233,184,207,.4));
 }
 
 @keyframes heartPulse {
@@ -230,115 +409,213 @@ body {
     50%      { transform: translateY(-50%) scale(1.12); }
 }
 
-.target.hit { animation: heartHit .8s ease; }
-
-@keyframes heartHit {
-    0%   { transform: translateY(-50%) scale(1); }
-    30%  { transform: translateY(-50%) scale(1.5) rotate(10deg); }
-    60%  { transform: translateY(-50%) scale(.85) rotate(-8deg); }
-    100% { transform: translateY(-50%) scale(1); }
+.target.hit {
+    animation: heartHit .85s cubic-bezier(.34,1.56,.64,1);
 }
 
-.flying-arrow {
+@keyframes heartHit {
+    0%   { transform: translateY(-50%) scale(1.12,1.12) rotate(0deg); }
+    12%  { transform: translateY(-50%) scale(1.55,.62) rotate(-4deg); }
+    28%  { transform: translateY(-56%) scale(.68,1.42) rotate(6deg); }
+    45%  { transform: translateY(-46%) scale(1.28,.8) rotate(-3deg); }
+    62%  { transform: translateY(-52%) scale(.9,1.12) rotate(2deg); }
+    80%  { transform: translateY(-50%) scale(1.06,.96) rotate(-1deg); }
+    100% { transform: translateY(-50%) scale(1,1) rotate(0deg); }
+}
+
+.flying-emoji {
     position: absolute;
-    font-size: 32px;
-    z-index: 20;
+    font-size: 27px;
+    z-index: 5;
     pointer-events: none;
     transform: translate(-50%, -50%);
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,.35));
+}
+
+.trail-spark {
+    position: absolute;
+    z-index: 4;
+    pointer-events: none;
+    font-size: 13px;
+    transform: translate(-50%, -50%);
+    animation: trailFade .55s ease-out forwards;
+}
+
+@keyframes trailFade {
+    0%   { opacity: .95; transform: translate(-50%,-50%) scale(1) rotate(0deg); }
+    100% { opacity: 0;   transform: translate(-50%,-50%) scale(.3) rotate(50deg) translateY(10px); }
+}
+
+.score-popup {
+    position: absolute;
+    z-index: 6;
+    left: 50%;
+    top: -6px;
+    transform: translate(-50%, 0) scale(.3);
+    font-family: "Great Vibes", cursive;
+    font-size: 30px;
+    color: var(--gold);
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow: 0 0 12px rgba(215,168,95,.5);
+    animation: popFloat 1.4s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+@keyframes popFloat {
+    0%   { transform: translate(-50%, 0) scale(.2) rotate(-8deg);  opacity: 0; }
+    22%  { transform: translate(-50%, -18px) scale(1.15) rotate(4deg); opacity: 1; }
+    40%  { transform: translate(-50%, -24px) scale(.95) rotate(-2deg); opacity: 1; }
+    100% { transform: translate(-50%, -70px) scale(1) rotate(0deg); opacity: 0; }
 }
 
 /* =====================================================
-   BALLOON GAME
+   CATCH YOUR TITLI (butterfly game)
 ===================================================== */
 
-.balloon-field {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    flex-wrap: wrap;
-    margin: 25px auto;
-    max-width: 650px;
+.butterfly-stage {
+    position: relative;
+    width: min(560px, 92vw);
+    height: 210px;
+    margin: 26px auto 4px;
+    border: 1px dashed rgba(215,168,95,.18);
 }
 
-.balloon {
-    width: 70px;
-    height: 90px;
-    background: radial-gradient(circle at 30% 30%, var(--rose), var(--plum-2));
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-    cursor: pointer;
+.butterfly {
+    position: absolute;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    position: relative;
-    box-shadow: inset -5px -5px 12px rgba(0,0,0,0.3);
-    animation: balloonFloat 3s ease-in-out infinite alternate;
-    transition: transform 0.2s ease;
+    cursor: pointer;
+    transition: left 1.9s ease-in-out, top 1.9s ease-in-out, transform .4s ease;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,.35));
 }
 
-.balloon:nth-child(even) {
-    background: radial-gradient(circle at 30% 30%, var(--gold), var(--plum-2));
-    animation-duration: 2.6s;
+.butterfly .wing-flap {
+    display: inline-block;
+    font-size: 30px;
+    animation: wingFlap .5s ease-in-out infinite alternate;
+    animation-delay: inherit;
 }
 
-.balloon:hover { transform: scale(1.1); }
-
-.balloon::after {
-    content: "📍";
-    position: absolute;
-    bottom: -12px;
-    font-size: 12px;
+@keyframes wingFlap {
+    0%   { transform: scale(1, 1) rotate(0deg); }
+    100% { transform: scale(1, .78) rotate(6deg); }
 }
 
-@keyframes balloonFloat {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-12px); }
+.butterfly:focus-visible { outline: 2px solid var(--rose); outline-offset: 4px; }
+
+.catch-counter {
+    font-style: italic;
+    color: var(--gold);
+    font-size: 16px;
+    letter-spacing: .4px;
+    margin-top: 4px;
 }
 
-.balloon.popped {
-    visibility: hidden;
+.game-hint {
+    font-style: italic;
+    color: var(--ivory-70);
+    font-size: 16px;
+    margin-top: 6px;
+    letter-spacing: .3px;
+}
+
+.burst-piece {
+    position: fixed;
+    z-index: 500;
     pointer-events: none;
 }
 
-/* =====================================================
-   ALL PICS GALLERY
-===================================================== */
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.gallery-card {
-    background: rgba(215,168,95,.05);
-    border: 1px solid rgba(215,168,95,.2);
-    padding: 6px;
-    border-radius: 2px;
-}
-
-.gallery-card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    display: block;
-}
 
 /* =====================================================
-   MUSIC & PROGRESS
+   FOREVER QUESTION
 ===================================================== */
 
-.progress {
+.forever { position: relative; min-height: 260px; }
+
+.forever h1 {
+    font-family: "Great Vibes", cursive;
+    font-size: clamp(56px, 10vw, 118px);
+    color: var(--rose);
+    text-shadow: 0 0 35px rgba(233,184,207,.4);
+}
+
+.question {
+    font-size: clamp(26px, 4.6vw, 52px);
+    font-style: italic;
+    margin-top: 18px;
+    color: var(--ivory);
+}
+
+.answers { display: flex; justify-content: center; gap: 18px; margin-top: 34px; flex-wrap: wrap; }
+
+.answer {
+    padding: 15px 36px;
+    border: 1px solid rgba(215,168,95,.45);
+    background: rgba(255,255,255,.03);
+    color: var(--ivory);
+    cursor: pointer;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 16px;
+    transition: .35s ease;
+}
+
+.answer:hover, .answer:focus-visible {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+    transform: scale(1.06);
+}
+.answer:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+
+
+/* =====================================================
+   FINAL SCREEN
+===================================================== */
+
+.final-title {
+    font-family: "Great Vibes", cursive;
+    font-size: clamp(60px, 13vw, 140px);
+    color: var(--rose);
+}
+
+.final-text {
+    font-size: clamp(20px, 2.6vw, 29px);
+    line-height: 1.65;
+    max-width: 740px;
+    margin: 22px auto;
+    color: var(--ivory);
+}
+
+.final-text strong { color: var(--gold); font-weight: 600; }
+
+
+/* =====================================================
+   FALLING PETALS / WINGS
+===================================================== */
+
+.heart {
     position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 200;
-    height: 3px;
-    width: 0%;
-    background: linear-gradient(90deg, var(--gold), var(--rose));
-    transition: width .8s ease;
+    z-index: 100;
+    pointer-events: none;
+    font-size: 18px;
+    animation: heartFall linear forwards;
+    filter: drop-shadow(0 0 6px rgba(215,168,95,.25));
 }
+
+@keyframes heartFall {
+    0%   { transform: translateY(-30px) rotate(0); opacity: 0; }
+    12%  { opacity: .9; }
+    100% { transform: translateY(110vh) translateX(var(--move)) rotate(300deg); opacity: 0; }
+}
+
+
+/* =====================================================
+   MUSIC TOGGLE
+===================================================== */
 
 .music {
     position: fixed;
@@ -351,331 +628,695 @@ body {
     font-family: "Cormorant Garamond", serif;
     font-style: italic;
     font-size: 15px;
-    padding: 8px 18px;
+    padding: 10px 20px;
     cursor: pointer;
+    transition: .3s;
 }
+.music:hover, .music:focus-visible { border-color: var(--gold); color: var(--gold); }
 
-.heart-particle {
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.progress {
     position: fixed;
-    z-index: 100;
-    pointer-events: none;
-    animation: heartFall linear forwards;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--rose));
+    transition: width .9s ease;
 }
 
-@keyframes heartFall {
-    0%   { transform: translateY(-30px) rotate(0); opacity: 0; }
-    15%  { opacity: .9; }
-    100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+    .memories { grid-template-columns: 1fr; }
+    .memory img { height: 180px; }
+    .letter { padding: 26px 24px; }
+    .answers { flex-direction: column; align-items: center; }
+    .answer { width: 220px; }
 }
 
 </style>
 </head>
+
+
 <body>
 
 <div class="progress" id="progress"></div>
+<div class="grain"></div>
 
-<!-- SCREEN 1: INTRO -->
+<!-- Background Music: Ishq Mubarak from Tum Bin 2 -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://www.youtube.com/watch?v=V1oczq_8L0E" type="audio/mpeg">
+</audio>
+
+
+<!-- SCREEN 1 — OPENING -->
 <section class="screen active" id="screen1">
     <div class="background"></div>
     <div class="wingfield"></div>
     <div class="content">
-        <div class="mark">our story in one frame</div>
+        <div class="mark">a story written by fate</div>
         <h1 class="title">Upasana</h1>
-        <div class="photo-frame">
-            <img src="100.png" alt="Our Love Story">
-        </div>
-        <div class="typewriter" id="t1"></div>
-        <button class="btn" onclick="nextScreen()">Start Our Story ❤️</button>
+        <div class="typewriter" id="introText"></div>
+        <button class="btn" onclick="nextScreen()">enter our story</button>
     </div>
 </section>
 
-<!-- SCREEN 2: BOW & ARROW GAME -->
+
+<!-- SCREEN 2 — BEGINNING -->
 <section class="screen" id="screen2">
     <div class="background"></div>
     <div class="content">
-        <div class="mark">a little game for you</div>
-        <h2 class="serif">Aim for My Heart</h2>
-        <p style="color: var(--ivory-70); margin-top: 5px;">Tap the loaded bow to release the arrow!</p>
-
-        <div class="game-stage" id="gameStage">
-            <div class="bow" id="bowBtn" onclick="shootArrow()">🏹</div>
-            <div class="target" id="heartTarget">❤️</div>
-        </div>
-
-        <div class="typewriter" id="arrowResult" style="display:none;"></div>
-        <button class="btn" id="arrowNextBtn" style="display:none;" onclick="nextScreen()">Next Page ➔</button>
+        <div class="mark">before we became "us"</div>
+        <h2 class="serif">Where it started</h2>
+        <div class="typewriter" id="beginText"></div>
+        <button class="btn" onclick="nextScreen()">continue</button>
     </div>
 </section>
 
-<!-- SCREEN 3: NEXT PAGE LINES & PIC 1 -->
+
+<!-- SCREEN 3 — CLASS 9 -->
 <section class="screen" id="screen3">
     <div class="background"></div>
     <div class="content">
-        <div class="mark">together always</div>
-        <h2 class="serif">Side by side, hand in hand</h2>
-        <div class="photo-frame">
-            <img src="1.jpeg" alt="Us Together 1">
-        </div>
-        <div class="typewriter" id="t3"></div>
-        <button class="btn" onclick="nextScreen()">Next Page ➔</button>
+        <div class="mark">class nine, Bengali batch</div>
+        <h2 class="serif">Two ordinary desks</h2>
+        <div class="typewriter" id="classText"></div>
+        <button class="btn" onclick="nextScreen()">that was the beginning</button>
     </div>
 </section>
 
-<!-- SCREEN 4: NEXT PAGE LINES & PIC 2 -->
+
+<!-- SCREEN 4 — HER PHOTO -->
 <section class="screen" id="screen4">
     <div class="background"></div>
     <div class="content">
-        <div class="mark">making memories</div>
-        <h2 class="serif">Every moment is sweet with you</h2>
+        <div class="mark">then there was you</div>
         <div class="photo-frame">
-            <img src="2.jpeg" alt="Us Together 2">
+            <img src="photos/upasana1.jpg" alt="Upasana">
         </div>
-        <div class="typewriter" id="t4"></div>
-        <button class="btn" onclick="nextScreen()">Next Page ➔</button>
+        <div class="photo-caption">My beautiful Titli</div>
+        <button class="btn" onclick="nextScreen()">next</button>
     </div>
 </section>
 
-<!-- SCREEN 5: BALLOON POPPING STORY GAME -->
+
+<!-- SCREEN 5 — HIS PHOTO -->
 <section class="screen" id="screen5">
     <div class="background"></div>
     <div class="content">
-        <div class="mark">interactive story balloons</div>
-        <h2 class="serif">Pop a Balloon to Reveal Our Tale!</h2>
-        <p style="color: var(--ivory-70); margin-top: 5px;">Click each balloon to crack it open and hear a new story line.</p>
-
-        <div class="typewriter" id="balloonStoryText">Tap any balloon above...</div>
-
-        <div class="balloon-field" id="balloonContainer"></div>
-
-        <button class="btn" id="balloonNextBtn" style="display:none;" onclick="nextScreen()">See All Our Pictures ➔</button>
+        <div class="mark">and then there was me</div>
+        <div class="photo-frame">
+            <img src="photos/swapnadip1.jpg" alt="Swapnadip">
+        </div>
+        <div class="photo-caption">Your Subhoo</div>
+        <button class="btn" onclick="nextScreen()">next</button>
     </div>
 </section>
 
-<!-- SCREEN 6: ALL OUR PICS GALLERY & FINAL STORY -->
+
+<!-- SCREEN 6 — MEMORIES -->
 <section class="screen" id="screen6">
+    <div class="background"></div>
+    <div class="content">
+        <div class="mark">little moments, kept</div>
+        <h2 class="serif">Pieces of us</h2>
+        <div class="memories">
+            <div class="memory">
+                <img src="photos/upasana2.jpg" alt="Memory">
+                <div class="memory-text">Your smile.</div>
+            </div>
+            <div class="memory">
+                <img src="photos/swapnadip2.jpg" alt="Memory">
+                <div class="memory-text">My favourite person.</div>
+            </div>
+            <div class="memory">
+                <img src="photos/together1.jpg" alt="Together">
+                <div class="memory-text">Our little world.</div>
+            </div>
+        </div>
+        <button class="btn" onclick="nextScreen()">more</button>
+    </div>
+</section>
+
+
+<!-- SCREEN 7 — NICKNAMES -->
+<section class="screen" id="screen7">
+    <div class="background"></div>
+    <div class="content">
+        <div class="mark">the names I call you</div>
+        <h2 class="serif">Every name, a little piece of my love</h2>
+        <div class="typewriter" id="namesText"></div>
+        <button class="btn" onclick="nextScreen()">continue</button>
+    </div>
+</section>
+
+
+<!-- SCREEN 8 — CUPID'S ARROW GAME -->
+<section class="screen" id="screen8">
+    <div class="background"></div>
+    <div class="content">
+        <div class="mark">a little game</div>
+        <h2 class="serif">Cupid was clearly practicing on us</h2>
+
+        <div class="game-stage" id="gameStage">
+            <div class="bow" id="bowEmoji" role="button" tabindex="0" aria-label="Shoot the arrow" onclick="shootArrow()" onkeydown="if(event.key==='Enter'||event.key===' ')shootArrow()">🏹</div>
+            <div class="target" id="heartTarget">❤️</div>
+        </div>
+
+        <div class="game-hint" id="gameHint">tap the bow — let it fly</div>
+        <div class="typewriter" id="gameResult" style="display:none;"></div>
+
+        <button class="btn" id="gameContinueBtn" style="display:none;" onclick="nextScreen()">continue</button>
+    </div>
+</section>
+
+
+<!-- SCREEN 9 — CATCH YOUR TITLI GAME -->
+<section class="screen" id="screen9">
+    <div class="background"></div>
+    <div class="content">
+        <div class="mark">a little game, part two</div>
+        <h2 class="serif">Catch your Titli</h2>
+
+        <div class="butterfly-stage" id="butterflyStage"></div>
+
+        <div class="catch-counter" id="catchCounter">caught 0 / 5</div>
+        <div class="game-hint" id="butterflyHint">tap each one before it flutters away</div>
+        <div class="typewriter" id="butterflyResult" style="display:none;"></div>
+
+        <button class="btn" id="butterflyContinueBtn" style="display:none;" onclick="nextScreen()">continue</button>
+    </div>
+</section>
+
+
+<!-- SCREEN 10 — LETTER -->
+<section class="screen" id="screen10">
+    <div class="background"></div>
+    <div class="content">
+        <div class="mark">a letter from Subhoo</div>
+        <h2 class="serif">Dear Titli</h2>
+        <div class="letter" id="letterText"></div>
+        <button class="btn" onclick="nextScreen()">there's one more thing</button>
+    </div>
+</section>
+
+
+<!-- SCREEN 11 — TOGETHER -->
+<section class="screen" id="screen11">
+    <div class="background"></div>
+    <div class="content">
+        <div class="mark">somewhere along the way</div>
+        <div class="photo-frame">
+            <img src="photos/together2.jpg" alt="Us">
+        </div>
+        <div class="photo-caption">It became us.</div>
+        <button class="btn" onclick="nextScreen()">next</button>
+    </div>
+</section>
+
+
+<!-- SCREEN 12 — BIRTHDAY -->
+<section class="screen" id="screen12">
     <div class="background"></div>
     <div class="wingfield"></div>
     <div class="content">
-        <div class="mark">forever & always</div>
-        <h1 class="title">My Titli ❤️</h1>
-        <div class="typewriter" id="t6"></div>
-
-        <div class="gallery-grid">
-            <div class="gallery-card"><img src="100.png" alt="Love Story"><p style="font-size:14px; margin-top:3px;">Our Love Story</p></div>
-            <div class="gallery-card"><img src="1.jpeg" alt="Pic 1"><p style="font-size:14px; margin-top:3px;">Us Together</p></div>
-            <div class="gallery-card"><img src="2.jpeg" alt="Pic 2"><p style="font-size:14px; margin-top:3px;">Sweet Moments</p></div>
-            <div class="gallery-card"><img src="3.jpeg" alt="Pic 3"><p style="font-size:14px; margin-top:3px;">Forever Mine</p></div>
-            <div class="gallery-card"><img src="upasana1.jpeg" alt="Upasana 1"><p style="font-size:14px; margin-top:3px;">My Titli 🦋</p></div>
-            <div class="gallery-card"><img src="upasana2.jpeg" alt="Upasana 2"><p style="font-size:14px; margin-top:3px;">My Angel</p></div>
-            <div class="gallery-card"><img src="upasana.3jpeg" alt="Upasana 3"><p style="font-size:14px; margin-top:3px;">My Beauty</p></div>
-        </div>
-
-        <button class="btn" style="margin-top: 25px;" onclick="showScreen(1)">Replay Our Story 🔄</button>
+        <div class="mark">21 September</div>
+        <h1 class="title">Happy Birthday</h1>
+        <h2 class="serif">My Titli</h2>
+        <div class="typewriter" id="birthdayText"></div>
+        <button class="btn" onclick="nextScreen()">I have a question...</button>
     </div>
 </section>
 
-<button class="music" id="musicButton" onclick="toggleMusic()">♫ Music: OFF</button>
+
+<!-- SCREEN 13 — FOREVER QUESTION -->
+<section class="screen" id="screen13">
+    <div class="background"></div>
+    <div class="wingfield"></div>
+    <div class="content forever">
+        <div class="mark">from your Subhoo</div>
+        <h1>Upasana...</h1>
+        <div class="question" id="foreverQuestion"></div>
+        <div class="answers">
+            <button class="answer" onclick="yesAnswer()">yes</button>
+            <button class="answer" onclick="yesAnswer()">always</button>
+        </div>
+    </div>
+</section>
+
+
+<!-- SCREEN 14 — FINAL -->
+<section class="screen" id="screen14">
+    <div class="background"></div>
+    <div class="wingfield"></div>
+    <div class="content">
+        <div class="mark">our story continues</div>
+        <h1 class="final-title">Forever</h1>
+        <div class="final-text" id="finalText"></div>
+        <p class="final-text">
+            Happy Birthday, Upasana. 🎂
+            <br><br>
+            My Titli. My Babe. My Sona. My Ma. My Khapi.
+            <br><br>
+            Forever yours,
+            <br>
+            <strong>Subhoo / Swapnadip</strong>
+        </p>
+    </div>
+</section>
+
+
+<button class="music" id="musicButton" onclick="toggleMusic()">♫ music</button>
+
 
 <script>
-let currentScreen = 1;
-const totalScreens = 6;
 
-function showScreen(num) {
+let currentScreen = 1;
+const totalScreens = 14;
+
+function showScreen(number) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-    document.getElementById("screen" + num).classList.add("active");
-    currentScreen = num;
-    document.getElementById("progress").style.width = ((num - 1) / (totalScreens - 1) * 100) + "%";
-    startScreen(num);
+    document.getElementById("screen" + number).classList.add("active");
+    currentScreen = number;
+    document.getElementById("progress").style.width = ((number - 1) / (totalScreens - 1) * 100) + "%";
+    startScreen(number);
 }
 
 function nextScreen() {
     if (currentScreen < totalScreens) showScreen(currentScreen + 1);
 }
 
-function typeText(element, text, speed = 35) {
+function typeText(element, text, speed = 45) {
     element.innerHTML = "";
-    let i = 0;
+    let index = 0;
     const timer = setInterval(() => {
-        element.innerHTML += text.charAt(i);
-        i++;
-        if (i >= text.length) clearInterval(timer);
+        element.innerHTML += text.charAt(index);
+        index++;
+        if (index >= text.length) clearInterval(timer);
     }, speed);
 }
 
-function startScreen(num) {
-    if (num === 1) {
-        typeText(document.getElementById("t1"), "One photo, endless emotions. Every single chapter of us leads straight to you.");
+function startScreen(number) {
+
+    if (number === 1) {
+        typeText(document.getElementById("introText"),
+            "Some love stories are planned... ours simply happened.", 45);
     }
-    if (num === 3) {
-        typeText(document.getElementById("t3"), "From ordinary moments to our most cherished ones, having you by my side makes life complete.");
+
+    if (number === 2) {
+        typeText(document.getElementById("beginText"),
+            "We didn't know that one ordinary day would become the beginning of something extraordinary.", 38);
     }
-    if (num === 4) {
-        typeText(document.getElementById("t4"), "No matter how much time passes, my favorite place in the world will always be right next to you.");
+
+    if (number === 3) {
+        typeText(document.getElementById("classText"),
+            "Class 9. A Bengali batch. Two people who had no idea that life was quietly writing our story.", 38);
     }
-    if (num === 5) {
-        initBalloons();
+
+    if (number === 7) {
+        typeText(document.getElementById("namesText"),
+            "Titli... Babe... Sona... Ma... Khapi... every name carries a little piece of my love in it.", 42);
     }
-    if (num === 6) {
-        typeText(document.getElementById("t6"), "Upasana, you are my today, my tomorrow, and all of my future. Happy Birthday my Titli! 🎂💖");
+
+    if (number === 8) {
+        arrowHasLanded = false;
+        const bow = document.getElementById("bowEmoji");
+        const target = document.getElementById("heartTarget");
+        bow.classList.remove("spent", "recoil", "aiming");
+        target.classList.remove("hit");
+        target.textContent = "❤️";
+        document.querySelectorAll("#gameStage .flying-emoji, #gameStage .trail-spark, #gameStage .score-popup").forEach(el => el.remove());
+        document.getElementById("gameHint").style.display = "block";
+        document.getElementById("gameResult").style.display = "none";
+        document.getElementById("gameResult").innerHTML = "";
+        document.getElementById("gameContinueBtn").style.display = "none";
+    }
+
+    if (number === 9) {
+        initButterflyGame();
+    }
+
+    if (number === 10) {
+        typeText(document.getElementById("letterText"),
+            "Upasana, I don't know exactly when you became such an important part of my life. Maybe it happened slowly, through the small conversations, the smiles, the memories and all those little moments. But today I know one thing — I am incredibly lucky to have you in my story. I may not always have the perfect words, but my heart knows exactly what it feels when it thinks about you.", 25);
+    }
+
+    if (number === 12) {
+        typeText(document.getElementById("birthdayText"),
+            "Today isn't just another day. It's the day my favourite person was born. Happy Birthday, Titli.", 42);
+    }
+
+    if (number === 13) {
+        typeText(document.getElementById("foreverQuestion"),
+            "Will you stay with me... forever?", 65);
+    }
+
+    if (number === 14) {
+        typeText(document.getElementById("finalText"),
+            "Whatever the future brings, I hope we keep choosing each other, laughing together, making memories and writing the next chapters of our story.", 32);
     }
 }
 
 /* =====================================================
-   BOW & ARROW LOGIC
+   CUPID'S ARROW GAME
 ===================================================== */
-let arrowShot = false;
+
+let arrowHasLanded = false;
 
 function shootArrow() {
-    if (arrowShot) return;
-    arrowShot = true;
 
-    const bow = document.getElementById("bowBtn");
-    const target = document.getElementById("heartTarget");
+    if (arrowHasLanded) return;
+
+    const bow = document.getElementById("bowEmoji");
+    arrowHasLanded = true;
+    bow.classList.add("aiming");
+
+    setTimeout(() => releaseArrow(), 280);
+}
+
+function releaseArrow() {
+
     const stage = document.getElementById("gameStage");
+    const bow = document.getElementById("bowEmoji");
+    const target = document.getElementById("heartTarget");
 
-    bow.classList.add("spent");
+    bow.classList.remove("aiming");
+    bow.classList.add("spent", "recoil");
+
+    const stageRect = stage.getBoundingClientRect();
+    const bowRect = bow.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+
+    const p0 = {
+        x: bowRect.left - stageRect.left + bowRect.width * .78,
+        y: bowRect.top - stageRect.top + bowRect.height / 2
+    };
+    const p1 = {
+        x: (p0.x + (targetRect.left - stageRect.left + targetRect.width / 2)) / 2,
+        y: Math.min(p0.y, targetRect.top - stageRect.top + targetRect.height / 2) - 46
+    };
+    const p2 = {
+        x: targetRect.left - stageRect.left + targetRect.width / 2,
+        y: targetRect.top - stageRect.top + targetRect.height / 2
+    };
+
+    const duration = 640;
+
+    function bezierPoint(t) {
+        const mt = 1 - t;
+        return {
+            x: mt * mt * p0.x + 2 * mt * t * p1.x + t * t * p2.x,
+            y: mt * mt * p0.y + 2 * mt * t * p1.y + t * t * p2.y
+        };
+    }
+
+    function bezierAngle(t) {
+        const mt = 1 - t;
+        const dx = 2 * mt * (p1.x - p0.x) + 2 * t * (p2.x - p1.x);
+        const dy = 2 * mt * (p1.y - p0.y) + 2 * t * (p2.y - p1.y);
+        return Math.atan2(dy, dx) * (180 / Math.PI);
+    }
 
     const arrow = document.createElement("div");
-    arrow.className = "flying-arrow";
-    arrow.innerHTML = "💘";
+    arrow.className = "flying-emoji";
+    arrow.textContent = "💘";
     stage.appendChild(arrow);
 
-    const bowRect = bow.getBoundingClientRect();
+    const startTime = performance.now();
+
+    function step(now) {
+        const t = Math.min((now - startTime) / duration, 1);
+        const pos = bezierPoint(t);
+        const angle = bezierAngle(t);
+
+        arrow.style.left = pos.x + "px";
+        arrow.style.top = pos.y + "px";
+        arrow.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
+
+        if (Math.random() < .5) {
+            const spark = document.createElement("div");
+            spark.className = "trail-spark";
+            spark.textContent = Math.random() > .5 ? "✦" : "·";
+            spark.style.left = pos.x + "px";
+            spark.style.top = pos.y + "px";
+            stage.appendChild(spark);
+            setTimeout(() => spark.remove(), 600);
+        }
+
+        if (t < 1) {
+            requestAnimationFrame(step);
+        } else {
+            arrow.remove();
+            registerHit(target);
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+function registerHit(target) {
+
+    target.classList.add("hit");
+    burstAt(target, 42);
+
+    const originalEmoji = target.textContent;
+    target.textContent = "💖";
+    setTimeout(() => { target.textContent = originalEmoji; }, 750);
+
+    const stage = document.getElementById("gameStage");
     const targetRect = target.getBoundingClientRect();
     const stageRect = stage.getBoundingClientRect();
 
-    const startX = bowRect.left - stageRect.left + 20;
-    const startY = bowRect.top - stageRect.top + 20;
-    const endX = targetRect.left - stageRect.left + 20;
-    const endY = targetRect.top - stageRect.top + 20;
+    const popup = document.createElement("div");
+    popup.className = "score-popup";
+    popup.textContent = "perfect aim!";
+    popup.style.left = (targetRect.left - stageRect.left + targetRect.width / 2) + "px";
+    popup.style.top = (targetRect.top - stageRect.top - 30) + "px";
+    stage.appendChild(popup);
+    setTimeout(() => popup.remove(), 1450);
 
-    const duration = 500;
-    const startTime = performance.now();
+    document.getElementById("gameHint").style.display = "none";
 
-    function animate(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+    const result = document.getElementById("gameResult");
+    result.style.display = "block";
+    typeText(result, "Direct hit. You've had my heart since day one.", 36);
 
-        const currentX = startX + (endX - startX) * progress;
-        const currentY = startY + (endY - startY) * progress;
+    setTimeout(() => {
+        document.getElementById("gameContinueBtn").style.display = "inline-block";
+    }, 900);
+}
 
-        arrow.style.left = currentX + "px";
-        arrow.style.top = currentY + "px";
+function burstAt(el, count = 40) {
 
-        if (progress < 1) {
-            requestAnimationFrame(animate);
-        } else {
-            arrow.remove();
-            target.classList.add("hit");
-            target.innerHTML = "💖";
-            
-            const result = document.getElementById("arrowResult");
-            result.style.display = "block";
-            typeText(result, "Bullseye! You struck right through my heart since day one! 💕");
-            
-            setTimeout(() => {
-                document.getElementById("arrowNextBtn").style.display = "inline-block";
-            }, 800);
-        }
+    const rect = el.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < count; i++) {
+
+        const piece = document.createElement("div");
+        piece.className = "burst-piece";
+        piece.textContent = Math.random() > .35 ? "❤" : "✦";
+        piece.style.left = originX + "px";
+        piece.style.top = originY + "px";
+        piece.style.fontSize = (12 + Math.random() * 20) + "px";
+
+        const x = (Math.random() - .5) * 380;
+        const y = (Math.random() - .5) * 380;
+
+        piece.animate([
+            { transform: "translate(-50%,-50%) scale(.2)", opacity: 1 },
+            { transform: `translate(${x}px, ${y}px) scale(1.1) rotate(${(Math.random()-.5)*300}deg)`, opacity: 0 }
+        ], {
+            duration: 900 + Math.random() * 700,
+            easing: "cubic-bezier(.2,.8,.2,1)",
+            fill: "forwards"
+        });
+
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 1900);
     }
-    requestAnimationFrame(animate);
 }
 
+
 /* =====================================================
-   BALLOON POPPING STORY LOGIC
+   CATCH YOUR TITLI (butterfly game)
 ===================================================== */
-const balloonStories = [
-    "🎈 Story Line 1: We started as two quiet desk-mates with no idea of what fate was writing...",
-    "🎈 Story Line 2: Through smiles, batch classes, and late talk sessions, you became my safest comfort...",
-    "🎈 Story Line 3: Every laugh shared together quickly turned into my favorite melody in the world...",
-    "🎈 Story Line 4: You earned nicknames like Titli, Babe, and Sona, each wrapping up my deepest love...",
-    "🎈 Story Line 5: Now, every dream I imagine begins and ends with you forever and always! ❤️"
-];
 
-let poppedCount = 0;
+let butterflyIntervals = [];
+let butterflyCaught = 0;
+const butterflyTotal = 5;
 
-function initBalloons() {
-    poppedCount = 0;
-    const container = document.getElementById("balloonContainer");
-    container.innerHTML = "";
-    document.getElementById("balloonNextBtn").style.display = "none";
-    document.getElementById("balloonStoryText").innerHTML = "Tap any balloon to crack it open!";
+function initButterflyGame() {
 
-    balloonStories.forEach((story, idx) => {
-        const b = document.createElement("div");
-        b.className = "balloon";
-        b.innerHTML = "🎈";
-        b.onclick = function() {
-            if (!b.classList.contains("popped")) {
-                b.classList.add("popped");
-                poppedCount++;
-                typeText(document.getElementById("balloonStoryText"), story);
-                
-                if (poppedCount === balloonStories.length) {
-                    setTimeout(() => {
-                        document.getElementById("balloonNextBtn").style.display = "inline-block";
-                    }, 1000);
-                }
-            }
-        };
-        container.appendChild(b);
-    });
+    butterflyIntervals.forEach(id => clearInterval(id));
+    butterflyIntervals = [];
+    butterflyCaught = 0;
+
+    const stage = document.getElementById("butterflyStage");
+    stage.innerHTML = "";
+
+    document.getElementById("catchCounter").textContent = `caught 0 / ${butterflyTotal}`;
+    document.getElementById("butterflyHint").style.display = "block";
+    document.getElementById("butterflyResult").style.display = "none";
+    document.getElementById("butterflyResult").innerHTML = "";
+    document.getElementById("butterflyContinueBtn").style.display = "none";
+
+    for (let i = 0; i < butterflyTotal; i++) {
+        createButterfly(stage);
+    }
 }
 
-/* =====================================================
-   BACKGROUND MUSIC
-===================================================== */
-let audioCtx = null;
-let musicOn = false;
-let musicInterval = null;
+function randomStagePos(stage, size) {
+    const rect = stage.getBoundingClientRect();
+    const maxX = Math.max(rect.width - size, 10);
+    const maxY = Math.max(rect.height - size, 10);
+    return { x: Math.random() * maxX, y: Math.random() * maxY };
+}
+
+function createButterfly(stage) {
+
+    const size = 34;
+
+    const el = document.createElement("div");
+    el.className = "butterfly";
+    el.tabIndex = 0;
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", "catch the butterfly");
+    el.innerHTML = '<span class="wing-flap">🦋</span>';
+
+    const start = randomStagePos(stage, size);
+    el.style.left = start.x + "px";
+    el.style.top = start.y + "px";
+    el.style.animationDelay = (Math.random() * .4) + "s";
+
+    stage.appendChild(el);
+
+    let lastX = start.x;
+
+    const moveId = setInterval(() => {
+        const pos = randomStagePos(stage, size);
+        el.style.transform = pos.x < lastX ? "scaleX(-1)" : "scaleX(1)";
+        lastX = pos.x;
+        el.style.left = pos.x + "px";
+        el.style.top = pos.y + "px";
+    }, 1800 + Math.random() * 800);
+
+    butterflyIntervals.push(moveId);
+
+    const catchIt = () => catchButterfly(el, moveId);
+    el.addEventListener("click", catchIt);
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); catchIt(); } });
+}
+
+function catchButterfly(el, moveId) {
+
+    if (el.classList.contains("caught")) return;
+    el.classList.add("caught");
+    clearInterval(moveId);
+
+    burstAt(el, 14);
+
+    const currentFlip = el.style.transform || "scaleX(1)";
+    el.style.transform = currentFlip + " scale(.2)";
+    el.style.opacity = "0";
+    setTimeout(() => el.remove(), 380);
+
+    butterflyCaught++;
+    document.getElementById("catchCounter").textContent = `caught ${butterflyCaught} / ${butterflyTotal}`;
+
+    if (butterflyCaught >= butterflyTotal) {
+
+        document.getElementById("butterflyHint").style.display = "none";
+
+        const result = document.getElementById("butterflyResult");
+        result.style.display = "block";
+        typeText(result, "You always catch my heart this easily, Titli.", 36);
+
+        setTimeout(() => {
+            document.getElementById("butterflyContinueBtn").style.display = "inline-block";
+        }, 900);
+    }
+}
+
+
+function yesAnswer() {
+    createHeartExplosion();
+    setTimeout(() => showScreen(14), 1500);
+}
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = Math.random() > .55 ? "❤" : (Math.random() > .5 ? "✦" : "🦋");
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.setProperty("--move", (Math.random() - .5) * 250 + "px");
+    heart.style.animationDuration = (6 + Math.random() * 6) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 13000);
+}
+
+function createHeartExplosion() {
+    for (let i = 0; i < 60; i++) {
+        const heart = document.createElement("div");
+        heart.innerHTML = Math.random() > .3 ? "❤" : "🦋";
+        heart.style.position = "fixed";
+        heart.style.left = "50%";
+        heart.style.top = "50%";
+        heart.style.zIndex = "500";
+        heart.style.fontSize = (14 + Math.random() * 22) + "px";
+
+        const x = (Math.random() - .5) * window.innerWidth;
+        const y = (Math.random() - .5) * window.innerHeight;
+
+        heart.animate([
+            { transform: "translate(-50%,-50%) scale(.2)", opacity: 1 },
+            { transform: `translate(${x}px, ${y}px) scale(1.15) rotate(320deg)`, opacity: 0 }
+        ], {
+            duration: 1200 + Math.random() * 1000,
+            easing: "cubic-bezier(.2,.8,.2,1)",
+            fill: "forwards"
+        });
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2500);
+    }
+}
+
+setInterval(createHeart, 950);
+
+
+let musicPlaying = false;
 
 function toggleMusic() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    musicOn = !musicOn;
-    const btn = document.getElementById("musicButton");
-    
-    if (musicOn) {
-        btn.innerHTML = "♫ Music: ON";
-        playSoftTone();
+    const audio = document.getElementById("bgMusic");
+    const button = document.getElementById("musicButton");
+
+    if (musicPlaying) {
+        audio.pause();
+        button.innerHTML = "♫ music";
+        musicPlaying = false;
     } else {
-        btn.innerHTML = "♫ Music: OFF";
-        clearInterval(musicInterval);
+        audio.play().then(() => {
+            button.innerHTML = "♫ music on";
+            musicPlaying = true;
+        }).catch(err => {
+            console.error("Audio playback error:", err);
+        });
     }
 }
 
-function playSoftTone() {
-    const notes = [261.63, 329.63, 392.00, 329.63, 293.66, 349.23, 440.00];
-    let idx = 0;
-    musicInterval = setInterval(() => {
-        if (!musicOn) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = "sine";
-        osc.frequency.value = notes[idx % notes.length];
-        gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.03, audioCtx.currentTime + 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.85);
-        idx++;
-    }, 850);
-}
-
-/* Floating Hearts Background */
-setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart-particle";
-    heart.innerHTML = Math.random() > 0.5 ? "🌸" : "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (12 + Math.random() * 16) + "px";
-    heart.style.animationDuration = (5 + Math.random() * 5) + "s";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 10000);
-}, 1000);
-
 startScreen(1);
+
 </script>
 
 </body>
