@@ -32,13 +32,18 @@ body {
 .title {
   font-family: 'Great Vibes', cursive;
   font-size: 3.5rem;
+  font-weight: 400;
   margin-bottom: 40px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px var(--glow-color);
 }
 
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 25px;
+  justify-content: center;
+  align-items: start;
 }
 
 .card {
@@ -46,13 +51,18 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 12px;
+  backdrop-filter: blur(8px);
 }
 
-/* Photo Fix: Shows 100% of photo without cropping faces */
+/* ছবি কাটিং সমস্যা সমাধানের ফিক্স */
 .img-wrapper {
   width: 100%;
-  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 4px;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .card-img {
@@ -61,24 +71,31 @@ body {
   max-height: 380px;
   object-fit: contain;
   display: block;
+  border-radius: 4px;
 }
 
 .caption {
-  margin-top: 10px;
   font-style: italic;
+  font-size: 1.2rem;
+  margin-top: 12px;
+  color: rgba(235, 220, 235, 0.9);
 }
 
 .action-bar {
-  margin-top: 30px;
+  margin-top: 45px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .btn {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-color);
-  padding: 8px 18px;
-  cursor: pointer;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  padding: 8px 22px;
   border-radius: 4px;
+  cursor: pointer;
 }
