@@ -1,82 +1,13 @@
-/* Navigation Header */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 18px 8%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(15, 8, 20, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
-  z-index: 1000;
-}
+// Play/Pause an MP3 file
+const audio = new Audio('our-song.mp3');
+audio.loop = true;
 
-.logo {
-  font-family: 'Great Vibes', cursive;
-  font-size: 2rem;
-  color: #ebdbe8;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-}
-
-.nav-links a {
-  color: var(--text-color);
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-style: italic;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover {
-  color: #ff99dd;
-}
-
-/* Hero Section */
-.hero-section {
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding-top: 80px;
-}
-
-.main-heading {
-  font-family: 'Great Vibes', cursive;
-  font-size: 4.5rem;
-  margin-bottom: 10px;
-  text-shadow: 0 0 20px var(--glow-color);
-}
-
-.sub-heading {
-  font-size: 1.3rem;
-  font-style: italic;
-  opacity: 0.8;
-}
-
-/* Story Section */
-.story-section {
-  margin-top: 60px;
-  padding-bottom: 80px;
-}
-
-.story-box {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 30px;
-  max-width: 700px;
-  margin: 0 auto;
-  font-size: 1.25rem;
-  line-height: 1.8;
-  font-style: italic;
-  backdrop-filter: blur(8px);
-}
+document.getElementById('musicBtn').addEventListener('click', function() {
+  if (audio.paused) {
+    audio.play();
+    this.innerText = '♫ music on';
+  } else {
+    audio.pause();
+    this.innerText = '♫ music off';
+  }
+});
