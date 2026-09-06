@@ -1,4 +1,4 @@
-// Floating Heart & Star Particles
+// Ambient Floating Heart Particle Generator
 function createFloatingParticles() {
   const container = document.getElementById('starsContainer');
   const symbols = ['✦', '✧', '♥', '❥', '•'];
@@ -49,26 +49,101 @@ function enableClickHearts() {
   });
 }
 
-// Custom Audio Control (Use your own 'song.mp3' or synthesizer fallback)
-const audio = new Audio('song.mp3');
-audio.loop = true;
+// Soft Audio Synthesizer Engine
+class SoftRomanticSynth {
+  constructor() {
+    this.audioCtx = null;
+    this.isPlaying = false;
+    this.tempo = 88;
+    this.currentNoteIndex = 0;
+    this.timerId = null;
+
+    this.notes = {
+      'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
+      'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25,
+      'REST': 0
+    };
+
+    this.melody = [
+      ['E4', 1.0], ['G4', 1.0], ['A4', 1.5], ['G4', 0.5],
+      ['E4', 1.0], ['D4', 1.0], ['C4', 2.0],
+      ['E4', 1.0], ['G4', 1.0], ['C5', 1.5], ['B4', 0.5],
+      ['A4', 2.0], ['G4', 2.0]
+    ];
+  }
+
+  init() {
+    if (!this.audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.audioCtx = new AudioContext();
+    }
+  }
+
+  playTone(freq, duration) {
+    if (freq === 0) return;
+
+    const osc = this.audioCtx.createOscillator();
+    const gain = this.audioCtx.createGain();
+    const filter = this.audioCtx.createBiquadFilter();
+
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+
+    filter.type = 'lowpass';
+    filter.frequency.value = 650;
+
+    const now = this.audioCtx.currentTime;
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(0.06, now + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration - 0.05);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  toggle() {
+    this.init();
+    if (this.audioCtx.state === 'suspended') {
+      this.audioCtx.resume();
+    }
+
+    const musicBtn = document.getElementById('musicBtn');
+
+    if (this.isPlaying) {
+      this.isPlaying = false;
+      clearTimeout(this.timerId);
+      musicBtn.innerText = '♫ music off';
+    } else {
+      this.isPlaying = true;
+      musicBtn.innerText = '♫ music on';
+      this.nextNote();
+    }
+  }
+
+  nextNote() {
+    if (!this.isPlaying) return;
+
+    const [note, beats] = this.melody[this.currentNoteIndex];
+    const durationSec = beats * (60 / this.tempo);
+
+    this.playTone(this.notes[note], durationSec);
+
+    this.currentNoteIndex = (this.currentNoteIndex + 1) % this.melody.length;
+    this.timerId = setTimeout(() => this.nextNote(), durationSec * 1000);
+  }
+}
+
+// Initialize on page load
+const romanticPlayer = new SoftRomanticSynth();
 
 document.addEventListener('DOMContentLoaded', () => {
   createFloatingParticles();
   enableClickHearts();
 
   const musicBtn = document.getElementById('musicBtn');
-  
-  musicBtn.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play().then(() => {
-        musicBtn.innerText = '♫ music on';
-      }).catch(() => {
-        console.log("Add a 'song.mp3' file to your folder for background music.");
-      });
-    } else {
-      audio.pause();
-      musicBtn.innerText = '♫ music off';
-    }
-  });
+  musicBtn.addEventListener('click', () => romanticPlayer.toggle());
 });
