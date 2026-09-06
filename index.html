@@ -351,61 +351,6 @@ body {
 .game-stage {
     position: relative;
     width: min(480px, 88vw);
-    height: 140px;
-    margin: 30px auto 8px;
-}
-
-.bow {
-    position: absolute;
-    left: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: clamp(38px, 8vw, 52px);
-    cursor: pointer;
-    transition: transform .2s ease, filter .2s ease;
-    filter: drop-shadow(0 6px 14px rgba(0,0,0,.4));
-}
-
-.bow:hover, .bow:focus-visible {
-    transform: translateY(-50%) scale(1.1) rotate(-6deg);
-}
-.bow:focus-visible { outline: 2px solid var(--rose); outline-offset: 4px; }
-
-.bow.spent { opacity: .55; cursor: default; }
-
-.target {
-    position: absolute;
-    right: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: clamp(40px, 8.5vw, 56px);
-    animation: heartPulse 1.7s ease-in-out infinite;
-    filter: drop-shadow(0 0 14px rgba(233,184,207,.4));
-}
-
-@keyframes heartPulse {
-    0%, 100% { transform: translateY(-50%) scale(1); }
-    50%      { transform: translateY(-50%) scale(1.12); }
-}
-
-.target.hit {
-    animation: heartHit .6s ease;
-}
-
-@keyframes heartHit {
-    0%   { transform: translateY(-50%) scale(1.12); }
-    35%  { transform: translateY(-50%) scale(1.5); }
-    60%  { transform: translateY(-50%) scale(.85) rotate(-8deg); }
-    100% { transform: translateY(-50%) scale(1); }
-}
-
-/* =====================================================
-   CUPID'S ARROW GAME
-===================================================== */
-
-.game-stage {
-    position: relative;
-    width: min(480px, 88vw);
     height: 150px;
     margin: 30px auto 8px;
 }
@@ -773,7 +718,7 @@ body {
     <div class="content">
         <div class="mark">then there was you</div>
         <div class="photo-frame">
-            <img src="upasana1.jpeg" alt="Upasana">
+            <img src="Upasana1.jpeg" alt="Upasana">
         </div>
         <div class="photo-caption">My beautiful Titli</div>
         <button class="btn" onclick="nextScreen()">next</button>
@@ -803,7 +748,7 @@ body {
         <h2 class="serif">Pieces of us</h2>
         <div class="memories">
             <div class="memory">
-                <img src="upasana2.jpeg" alt="Memory">
+                <img src="Upasana2.jpeg" alt="Memory">
                 <div class="memory-text">Your smile.</div>
             </div>
             <div class="memory">
@@ -815,7 +760,7 @@ body {
                 <div class="memory-text">Our little world.</div>
             </div>
             <div class="memory">
-                <img src="upasana3.jpeg" alt="Upasana">
+                <img src="Upasana3.jpeg" alt="Upasana">
                 <div class="memory-text">My Titli.</div>
             </div>
         </div>
@@ -953,7 +898,7 @@ body {
 
 <button class="music" id="musicButton" onclick="toggleMusic()">♫ music</button>
 
-<!-- Local music: place your audio file in the same folder and name it music.mp3 -->
+<!-- Local music: place your downloaded song in the same folder as this HTML file and name it music.mp3 -->
 <audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
 
 <script>
@@ -1356,6 +1301,10 @@ function createHeartExplosion() {
 setInterval(createHeart, 950);
 
 
+/* =====================================================
+   MUSIC — local file (music.mp3, same folder as this HTML)
+===================================================== */
+
 let musicPlaying = false;
 
 function toggleMusic() {
@@ -1380,7 +1329,7 @@ function toggleMusic() {
 
 startScreen(1);
 
-/* Start the local song after the visitor's first interaction.
+/* Start the song after the visitor's first interaction.
    Browsers block automatic audio before a user interaction. */
 document.addEventListener("click", function startLoveSongOnce() {
     const music = document.getElementById("bgMusic");
