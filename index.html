@@ -1,28 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For My Titli ❤️</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Upasana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #120a19;
+            --card-bg: rgba(25, 15, 35, 0.75);
+            --gold: #d7a85f;
+            --rose: #e9b8cf;
+            --text-light: #f4e9e6;
+            --text-muted: #a692a8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Top Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--rose), var(--gold));
+            transition: width 0.4s ease;
+        }
+
+        /* Screen Container */
+        .container {
+            width: 90%;
+            max-width: 650px;
+            min-height: 450px;
+            background: var(--card-bg);
+            border: 1px solid rgba(215, 168, 95, 0.3);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(233, 184, 207, 0.05);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Screen visibility */
+        .screen {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1, h2 {
+            font-family: 'Great Vibes', cursive;
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+
+        h1 { font-size: 3.2rem; }
+        h2 { font-size: 2.5rem; }
+
+        p {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: var(--rose);
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 12px 28px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            outline: none;
+        }
+
+        .btn:hover {
+            background: var(--gold);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px rgba(215, 168, 95, 0.4);
+        }
+
+        /* Games & Elements */
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            overflow: hidden;
+            margin: 15px auto;
+            box-shadow: 0 0 20px rgba(233, 184, 207, 0.3);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Catch Titli Mini-Game */
+        .titli-stage {
+            width: 100%;
+            height: 180px;
+            position: relative;
+            border: 1px dashed rgba(215, 168, 95, 0.3);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .titli-target {
+            font-size: 2rem;
+            position: absolute;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Choice buttons for final question */
+        .choice-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Falling Hearts Effect */
+        .heart {
+            position: fixed;
+            color: var(--rose);
+            font-size: 1.2rem;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Audio Element -->
-<audio id="bg-music" loop preload="auto">
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-<!-- Content Card -->
-<div class="card">
-    <h1 class="title">For My Titli ❤️</h1>
-    <p class="message">You bring color, warmth, and light into my world every single day.</p>
-    <p class="music-hint">♪ Tap anywhere to play background music ♪</p>
-</div>
+    <div class="container">
+        <!-- Screen 1 -->
+        <div class="screen active" id="screen1">
+            <h1>Upasana</h1>
+            <p class="subtitle">A little digital note, crafted just for you...</p>
+            <p>Every story starts somewhere, but ours holds a special place in my heart.</p>
+            <button class="btn" onclick="nextScreen(2)">Enter Our Story</button>
+        </div>
 
-<script src="song.js"></script>
+        <!-- Screen 2 -->
+        <div class="screen" id="screen2">
+            <h2>Before We Became 'Us'</h2>
+            <p>Long before we understood what forever meant, there was just a subtle spark waiting to bloom.</p>
+            <button class="btn" onclick="nextScreen(3)">Continue</button>
+        </div>
+
+        <!-- Screen 3 -->
+        <div class="screen" id="screen3">
+            <h2>Class Nine, Bengali Batch</h2>
+            <p>Those quiet glances across the classroom, shared smiles, and unforgettable memories made back then.</p>
+            <button class="btn" onclick="nextScreen(4)">Next Memory</button>
+        </div>
+
+        <!-- Screen 4: Photo Frame -->
+        <div class="screen" id="screen4">
+            <h2>Moments Frozen in Time</h2>
+            <div class="photo-frame">
+                <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80" alt="Memory">
+            </div>
+            <p>Some moments are meant to stay locked in our hearts forever.</p>
+            <button class="btn" onclick="nextScreen(5)">Play Mini-Game</button>
+        </div>
+
+        <!-- Screen 5: Mini-Game -->
+        <div class="screen" id="screen5">
+            <h2>Catch Your Titli 🦋</h2>
+            <p>Click on the butterfly 3 times to unlock the next chapter!</p>
+            <div class="titli-stage" id="stage">
+                <div class="titli-target" id="titli" onclick="catchTitli()">🦋</div>
+            </div>
+            <p id="scoreText">Caught: 0 / 3</p>
+            <button class="btn" id="gameNextBtn" style="display:none;" onclick="nextScreen(6)">Proceed</button>
+        </div>
+
+        <!-- Screen 6: Final Choice -->
+        <div class="screen" id="screen6">
+            <h2>A Simple Question...</h2>
+            <p>Through every chapter, every laugh, and every memory...</p>
+            <p style="font-size: 1.5rem; color: var(--gold);">Will you continue walking this journey with me, Titli?</p>
+            <div class="choice-container">
+                <button class="btn" onclick="finalResponse('yes')">Yes, Always! ❤️</button>
+                <button class="btn" id="noBtn" onmouseover="moveNoBtn()" onclick="finalResponse('yes')">No</button>
+            </div>
+        </div>
+
+        <!-- Screen 7: End -->
+        <div class="screen" id="screen7">
+            <h1>Always & Forever ✨</h1>
+            <p>Thank you for being the sweetest part of my life, Upasana.</p>
+            <p class="subtitle">With all my heart.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentScreen = 1;
+        const totalScreens = 7;
+        let titliCount = 0;
+
+        function updateProgress() {
+            const progress = ((currentScreen - 1) / (totalScreens - 1)) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function nextScreen(screenNumber) {
+            document.getElementById(`screen${currentScreen}`).classList.remove('active');
+            currentScreen = screenNumber;
+            document.getElementById(`screen${currentScreen}`).classList.add('active');
+            updateProgress();
+        }
+
+        // Catch Titli Game Logic
+        function catchTitli() {
+            titliCount++;
+            document.getElementById('scoreText').innerText = `Caught: ${titliCount} / 3`;
+
+            const stage = document.getElementById('stage');
+            const titli = document.getElementById('titli');
+
+            const maxX = stage.clientWidth - 40;
+            const maxY = stage.clientHeight - 40;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            titli.style.left = randomX + 'px';
+            titli.style.top = randomY + 'px';
+
+            if (titliCount >= 3) {
+                titli.style.display = 'none';
+                document.getElementById('scoreText').innerText = "You caught it! ✨";
+                document.getElementById('gameNextBtn').style.display = 'inline-block';
+            }
+        }
+
+        // Move 'No' button playfully
+        function moveNoBtn() {
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - 100) - window.innerWidth/2;
+            const y = Math.random() * (window.innerHeight - 100) - window.innerHeight/2;
+            noBtn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        function finalResponse(answer) {
+            nextScreen(7);
+            startHeartRain();
+        }
+
+        // Falling Hearts Effect
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = ['🌸', '✨', '💖', '🦋'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        function startHeartRain() {
+            setInterval(createHeart, 300);
+        }
+
+        // Background subtle hearts
+        setInterval(createHeart, 2000);
+    </script>
 </body>
 </html>
