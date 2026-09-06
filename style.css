@@ -1,5 +1,5 @@
 /* ==========================================
-   ROMANTIC DARK THEME & VARIABLES
+   ROMANTIC DARK THEME VARIABLES
    ========================================== */
 :root {
   --bg-color: #0f0814;
@@ -28,9 +28,8 @@ body {
 }
 
 /* ==========================================
-   BACKGROUND ANIMATIONS & GLOWS
+   BACKGROUND ANIMATIONS
    ========================================== */
-/* Soft Radial Background Glow */
 .bg-vignette {
   position: fixed;
   inset: 0;
@@ -38,7 +37,6 @@ body {
   z-index: -2;
 }
 
-/* Floating Particle Overlay */
 .stars-container {
   position: fixed;
   inset: 0;
@@ -59,12 +57,8 @@ body {
     transform: translateY(105vh) scale(0.8) rotate(0deg);
     opacity: 0;
   }
-  20% {
-    opacity: 0.7;
-  }
-  80% {
-    opacity: 0.7;
-  }
+  20% { opacity: 0.7; }
+  80% { opacity: 0.7; }
   100% {
     transform: translateY(-10vh) scale(1.2) rotate(360deg);
     opacity: 0;
@@ -72,7 +66,7 @@ body {
 }
 
 /* ==========================================
-   MAIN LAYOUT & TITLE
+   LAYOUT & TITLE
    ========================================== */
 .wrapper {
   width: 90%;
@@ -96,17 +90,16 @@ body {
   to { text-shadow: 0 0 25px rgba(240, 190, 230, 0.7); }
 }
 
-/* Grid Layout for Photo Cards */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 25px;
   justify-content: center;
   align-items: start;
 }
 
 /* ==========================================
-   PHOTO CARD & FLOATING ANIMATIONS
+   FLOATING CARD ANIMATION
    ========================================== */
 .card {
   background: var(--card-bg);
@@ -116,12 +109,11 @@ body {
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   
-  /* Gentle Floating Animation */
+  /* Continuous gentle floating motion */
   animation: floatCard 6s ease-in-out infinite alternate;
   transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Stagger card float timing */
 .card:nth-child(1) { animation-delay: 0s; }
 .card:nth-child(2) { animation-delay: 1.5s; }
 .card:nth-child(3) { animation-delay: 3s; }
@@ -139,31 +131,27 @@ body {
 }
 
 /* ==========================================
-   FULL PHOTO DISPLAY (NO CROPPING)
+   CSS BACKGROUND IMAGES (FULL SIZE / NO CROPPING)
    ========================================== */
 .img-wrapper {
   position: relative;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 320px;                     /* Adjust box height */
+  background-size: contain;           /* GUARANTEES 100% FULL PHOTO (NO CUT FACES) */
+  background-position: center;        /* Centers image in frame */
+  background-repeat: no-repeat;
   border-radius: 8px;
-  overflow: hidden;
   background-color: rgba(0, 0, 0, 0.25);
+  transition: transform 0.5s ease;
 }
 
-/* Shows 100% full picture in original natural dimensions */
-.card-img {
-  width: 100%;
-  height: auto;            /* Adjusts automatically based on original image size */
-  max-height: 400px;       /* Keeps tall images nicely balanced */
-  object-fit: contain;     /* Ensures zero cropping on any edge */
-  display: block;
-  border-radius: 6px;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
+/* Define your photo file paths here */
+.pic-1 { background-image: url('pic1.jpg'); }
+.pic-2 { background-image: url('pic2.jpg'); }
+.pic-3 { background-image: url('pic3.jpg'); }
+.pic-4 { background-image: url('pic4.jpg'); }
 
-/* Animated Light Sweep Effect on Hover */
+/* Shimmer Light Sweep Effect on Hover */
 .img-wrapper::after {
   content: '';
   position: absolute;
@@ -193,7 +181,7 @@ body {
   100% { left: 140%; }
 }
 
-.card:hover .card-img {
+.card:hover .img-wrapper {
   transform: scale(1.04);
 }
 
@@ -205,7 +193,7 @@ body {
 }
 
 /* ==========================================
-   ACTION BUTTONS
+   BUTTONS
    ========================================== */
 .action-bar {
   margin-top: 45px;
