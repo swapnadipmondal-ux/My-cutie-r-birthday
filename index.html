@@ -1,76 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Journey</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
-</head>
-<body>
+// Floating Heart & Star Particles
+function createFloatingParticles() {
+  const container = document.getElementById('starsContainer');
+  const symbols = ['✦', '✧', '♥', '❥', '•'];
+  const particleCount = 28;
 
-  <!-- Ambient Animated Background -->
-  <div class="bg-vignette"></div>
-  <div class="stars-container" id="starsContainer"></div>
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('span');
+    particle.className = 'particle';
+    particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+    
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.animationDuration = `${8 + Math.random() * 12}s`;
+    particle.style.animationDelay = `${Math.random() * 8}s`;
+    particle.style.fontSize = `${10 + Math.random() * 10}px`;
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="logo">Us.</div>
-    <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#gallery">Pieces of Us</a></li>
-      <li><a href="#story">Our Story</a></li>
-    </ul>
-    <button id="musicBtn" class="btn nav-btn">♫ music off</button>
-  </nav>
+    container.appendChild(particle);
+  }
+}
 
-  <!-- Hero Section -->
-  <section id="home" class="hero-section">
-    <h1 class="main-heading">Forever & Always</h1>
-    <p class="sub-heading">A collection of our favorite memories together.</p>
-  </section>
+// Click Heart Burst Effect
+function enableClickHearts() {
+  const cards = document.querySelectorAll('.card');
 
-  <!-- Pieces of Us Gallery Section -->
-  <section id="gallery" class="wrapper">
-    <h2 class="title">Pieces of us</h2>
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const heart = document.createElement('span');
+      heart.innerText = '♥';
+      heart.style.position = 'fixed';
+      heart.style.left = `${e.clientX}px`;
+      heart.style.top = `${e.clientY}px`;
+      heart.style.color = '#ff99dd';
+      heart.style.fontSize = '24px';
+      heart.style.pointerEvents = 'none';
+      heart.style.zIndex = '9999';
+      heart.style.transition = 'all 1s ease-out';
 
-    <div class="gallery-grid">
-      <!-- Card 1 -->
-      <div class="card">
-        <div class="img-wrapper pic-1"></div>
-        <p class="caption">Your smile.</p>
-      </div>
+      document.body.appendChild(heart);
 
-      <!-- Card 2 -->
-      <div class="card">
-        <div class="img-wrapper pic-2"></div>
-        <p class="caption">My favourite person.</p>
-      </div>
+      setTimeout(() => {
+        heart.style.transform = 'translateY(-60px) scale(1.6)';
+        heart.style.opacity = '0';
+      }, 10);
 
-      <!-- Card 3 -->
-      <div class="card">
-        <div class="img-wrapper pic-3"></div>
-        <p class="caption">Our little world.</p>
-      </div>
+      setTimeout(() => {
+        heart.remove();
+      }, 1000);
+    });
+  });
+}
 
-      <!-- Card 4 -->
-      <div class="card">
-        <div class="img-wrapper pic-4"></div>
-        <p class="caption">My 'Titli'.</p>
-      </div>
-    </div>
-  </section>
+// Custom Audio Control (Use your own 'song.mp3' or synthesizer fallback)
+const audio = new Audio('song.mp3');
+audio.loop = true;
 
-  <!-- Story Section -->
-  <section id="story" class="wrapper story-section">
-    <h2 class="title">Our Story</h2>
-    <div class="story-box">
-      <p>Every moment spent with you feels like a beautiful dream. Here's to all the memories we've made and the thousands more waiting for us.</p>
-    </div>
-  </section>
+document.addEventListener('DOMContentLoaded', () => {
+  createFloatingParticles();
+  enableClickHearts();
 
-  <script src="song.js"></script>
-</body>
-</html>
+  const musicBtn = document.getElementById('musicBtn');
+  
+  musicBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().then(() => {
+        musicBtn.innerText = '♫ music on';
+      }).catch(() => {
+        console.log("Add a 'song.mp3' file to your folder for background music.");
+      });
+    } else {
+      audio.pause();
+      musicBtn.innerText = '♫ music off';
+    }
+  });
+});
