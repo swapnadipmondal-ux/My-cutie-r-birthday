@@ -351,6 +351,61 @@ body {
 .game-stage {
     position: relative;
     width: min(480px, 88vw);
+    height: 140px;
+    margin: 30px auto 8px;
+}
+
+.bow {
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(38px, 8vw, 52px);
+    cursor: pointer;
+    transition: transform .2s ease, filter .2s ease;
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,.4));
+}
+
+.bow:hover, .bow:focus-visible {
+    transform: translateY(-50%) scale(1.1) rotate(-6deg);
+}
+.bow:focus-visible { outline: 2px solid var(--rose); outline-offset: 4px; }
+
+.bow.spent { opacity: .55; cursor: default; }
+
+.target {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(40px, 8.5vw, 56px);
+    animation: heartPulse 1.7s ease-in-out infinite;
+    filter: drop-shadow(0 0 14px rgba(233,184,207,.4));
+}
+
+@keyframes heartPulse {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50%      { transform: translateY(-50%) scale(1.12); }
+}
+
+.target.hit {
+    animation: heartHit .6s ease;
+}
+
+@keyframes heartHit {
+    0%   { transform: translateY(-50%) scale(1.12); }
+    35%  { transform: translateY(-50%) scale(1.5); }
+    60%  { transform: translateY(-50%) scale(.85) rotate(-8deg); }
+    100% { transform: translateY(-50%) scale(1); }
+}
+
+/* =====================================================
+   CUPID'S ARROW GAME
+===================================================== */
+
+.game-stage {
+    position: relative;
+    width: min(480px, 88vw);
     height: 150px;
     margin: 30px auto 8px;
 }
@@ -413,6 +468,7 @@ body {
     animation: heartHit .85s cubic-bezier(.34,1.56,.64,1);
 }
 
+/* bouncy squash-and-stretch, cartoon style */
 @keyframes heartHit {
     0%   { transform: translateY(-50%) scale(1.12,1.12) rotate(0deg); }
     12%  { transform: translateY(-50%) scale(1.55,.62) rotate(-4deg); }
@@ -446,6 +502,7 @@ body {
     100% { opacity: 0;   transform: translate(-50%,-50%) scale(.3) rotate(50deg) translateY(10px); }
 }
 
+/* the cute score popup that bounces up after a hit */
 .score-popup {
     position: absolute;
     z-index: 6;
@@ -672,11 +729,6 @@ body {
 <div class="progress" id="progress"></div>
 <div class="grain"></div>
 
-<!-- Background Music: Ishq Mubarak from Tum Bin 2 -->
-<audio id="bgMusic" loop preload="auto">
-    <source src="https://www.youtube.com/watch?v=V1oczq_8L0E" type="audio/mpeg">
-</audio>
-
 
 <!-- SCREEN 1 — OPENING -->
 <section class="screen active" id="screen1">
@@ -721,7 +773,7 @@ body {
     <div class="content">
         <div class="mark">then there was you</div>
         <div class="photo-frame">
-            <img src="photos/upasana1.jpg" alt="Upasana">
+            <img src="upasana1.jpeg" alt="Upasana">
         </div>
         <div class="photo-caption">My beautiful Titli</div>
         <button class="btn" onclick="nextScreen()">next</button>
@@ -735,7 +787,7 @@ body {
     <div class="content">
         <div class="mark">and then there was me</div>
         <div class="photo-frame">
-            <img src="photos/swapnadip1.jpg" alt="Swapnadip">
+            <img src="100.png" alt="Swapnadip">
         </div>
         <div class="photo-caption">Your Subhoo</div>
         <button class="btn" onclick="nextScreen()">next</button>
@@ -751,16 +803,20 @@ body {
         <h2 class="serif">Pieces of us</h2>
         <div class="memories">
             <div class="memory">
-                <img src="photos/upasana2.jpg" alt="Memory">
+                <img src="upasana2.jpeg" alt="Memory">
                 <div class="memory-text">Your smile.</div>
             </div>
             <div class="memory">
-                <img src="photos/swapnadip2.jpg" alt="Memory">
+                <img src="Both.1.jpeg" alt="Memory">
                 <div class="memory-text">My favourite person.</div>
             </div>
             <div class="memory">
-                <img src="photos/together1.jpg" alt="Together">
+                <img src="Both.2.jpeg" alt="Together">
                 <div class="memory-text">Our little world.</div>
+            </div>
+            <div class="memory">
+                <img src="upasana3.jpeg" alt="Upasana">
+                <div class="memory-text">My Titli.</div>
             </div>
         </div>
         <button class="btn" onclick="nextScreen()">more</button>
@@ -830,13 +886,13 @@ body {
 </section>
 
 
-<!-- SCREEN 11 — TOGETHER -->
+<!-- SCREEN 9 — TOGETHER -->
 <section class="screen" id="screen11">
     <div class="background"></div>
     <div class="content">
         <div class="mark">somewhere along the way</div>
         <div class="photo-frame">
-            <img src="photos/together2.jpg" alt="Us">
+            <img src="Both.3.jpeg" alt="Us">
         </div>
         <div class="photo-caption">It became us.</div>
         <button class="btn" onclick="nextScreen()">next</button>
@@ -844,7 +900,7 @@ body {
 </section>
 
 
-<!-- SCREEN 12 — BIRTHDAY -->
+<!-- SCREEN 10 — BIRTHDAY -->
 <section class="screen" id="screen12">
     <div class="background"></div>
     <div class="wingfield"></div>
@@ -858,7 +914,7 @@ body {
 </section>
 
 
-<!-- SCREEN 13 — FOREVER QUESTION -->
+<!-- SCREEN 11 — FOREVER QUESTION -->
 <section class="screen" id="screen13">
     <div class="background"></div>
     <div class="wingfield"></div>
@@ -874,7 +930,7 @@ body {
 </section>
 
 
-<!-- SCREEN 14 — FINAL -->
+<!-- SCREEN 12 — FINAL -->
 <section class="screen" id="screen14">
     <div class="background"></div>
     <div class="wingfield"></div>
@@ -897,6 +953,8 @@ body {
 
 <button class="music" id="musicButton" onclick="toggleMusic()">♫ music</button>
 
+<!-- Local music: place your audio file in the same folder and name it music.mp3 -->
+<audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
 
 <script>
 
@@ -997,7 +1055,7 @@ function shootArrow() {
     if (arrowHasLanded) return;
 
     const bow = document.getElementById("bowEmoji");
-    arrowHasLanded = true;
+    arrowHasLanded = true; // lock input during the whole aim + flight sequence
     bow.classList.add("aiming");
 
     setTimeout(() => releaseArrow(), 280);
@@ -1020,7 +1078,7 @@ function releaseArrow() {
         x: bowRect.left - stageRect.left + bowRect.width * .78,
         y: bowRect.top - stageRect.top + bowRect.height / 2
     };
-    const p1 = {
+    const p1 = { // arc apex, lifted above the straight line for a playful lob
         x: (p0.x + (targetRect.left - stageRect.left + targetRect.width / 2)) / 2,
         y: Math.min(p0.y, targetRect.top - stageRect.top + targetRect.height / 2) - 46
     };
@@ -1062,6 +1120,7 @@ function releaseArrow() {
         arrow.style.top = pos.y + "px";
         arrow.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
 
+        // leave a little sparkle trail as it flies
         if (Math.random() < .5) {
             const spark = document.createElement("div");
             spark.className = "trail-spark";
@@ -1088,10 +1147,12 @@ function registerHit(target) {
     target.classList.add("hit");
     burstAt(target, 42);
 
+    // a little cartoon reaction: the heart sparkles for a beat, then settles
     const originalEmoji = target.textContent;
     target.textContent = "💖";
     setTimeout(() => { target.textContent = originalEmoji; }, 750);
 
+    // bouncy score popup, straight out of a mobile game
     const stage = document.getElementById("gameStage");
     const targetRect = target.getBoundingClientRect();
     const stageRect = stage.getBoundingClientRect();
@@ -1298,25 +1359,41 @@ setInterval(createHeart, 950);
 let musicPlaying = false;
 
 function toggleMusic() {
-    const audio = document.getElementById("bgMusic");
+    const music = document.getElementById("bgMusic");
     const button = document.getElementById("musicButton");
 
-    if (musicPlaying) {
-        audio.pause();
-        button.innerHTML = "♫ music";
-        musicPlaying = false;
-    } else {
-        audio.play().then(() => {
-            button.innerHTML = "♫ music on";
+    if (!music) return;
+
+    if (!musicPlaying) {
+        music.play().then(() => {
             musicPlaying = true;
-        }).catch(err => {
-            console.error("Audio playback error:", err);
+            button.innerHTML = "♫ music on";
+        }).catch(() => {
+            button.innerHTML = "♫ tap again";
         });
+    } else {
+        music.pause();
+        musicPlaying = false;
+        button.innerHTML = "♫ music";
     }
 }
 
 startScreen(1);
 
+/* Start the local song after the visitor's first interaction.
+   Browsers block automatic audio before a user interaction. */
+document.addEventListener("click", function startLoveSongOnce() {
+    const music = document.getElementById("bgMusic");
+    const button = document.getElementById("musicButton");
+
+    if (music && !musicPlaying) {
+        music.play().then(() => {
+            musicPlaying = true;
+            if (button) button.innerHTML = "♫ music on";
+        }).catch(() => {});
+    }
+    document.removeEventListener("click", startLoveSongOnce);
+}, { once: true });
 </script>
 
 </body>
