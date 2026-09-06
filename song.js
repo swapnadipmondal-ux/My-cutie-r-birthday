@@ -1,4 +1,4 @@
-// Ambient Floating Particles Generator
+// Floating Heart & Star Particle Generator
 function createFloatingParticles() {
   const container = document.getElementById('starsContainer');
   const symbols = ['✦', '✧', '♥', '❥', '•'];
@@ -9,7 +9,6 @@ function createFloatingParticles() {
     particle.className = 'particle';
     particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
     
-    // Random positioning and timing
     particle.style.left = `${Math.random() * 100}%`;
     particle.style.animationDuration = `${8 + Math.random() * 12}s`;
     particle.style.animationDelay = `${Math.random() * 8}s`;
@@ -19,12 +18,43 @@ function createFloatingParticles() {
   }
 }
 
+// Interactive Heart Burst on Photo Click
+function enableClickHearts() {
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const heart = document.createElement('span');
+      heart.innerText = '♥';
+      heart.style.position = 'fixed';
+      heart.style.left = `${e.clientX}px`;
+      heart.style.top = `${e.clientY}px`;
+      heart.style.color = '#ff99dd';
+      heart.style.fontSize = '24px';
+      heart.style.pointerEvents = 'none';
+      heart.style.zIndex = '9999';
+      heart.style.transition = 'all 1s ease-out';
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.style.transform = 'translateY(-60px) scale(1.6)';
+        heart.style.opacity = '0';
+      }, 10);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 1000);
+    });
+  });
+}
+
 // Soft Audio Synthesizer Engine
 class SoftRomanticSynth {
   constructor() {
     this.audioCtx = null;
     this.isPlaying = false;
-    this.tempo = 88; // Gentle romantic pace
+    this.tempo = 88;
     this.currentNoteIndex = 0;
     this.timerId = null;
 
@@ -56,16 +86,15 @@ class SoftRomanticSynth {
     const gain = this.audioCtx.createGain();
     const filter = this.audioCtx.createBiquadFilter();
 
-    osc.type = 'sine'; // Soft, warm sine tone
+    osc.type = 'sine';
     osc.frequency.value = freq;
 
-    // Warm lowpass filter to remove sharp pitch
     filter.type = 'lowpass';
     filter.frequency.value = 650;
 
     const now = this.audioCtx.currentTime;
     gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.linearRampToValueAtTime(0.06, now + 0.1); // Gentle volume fade-in
+    gain.gain.linearRampToValueAtTime(0.06, now + 0.1);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + duration - 0.05);
 
     osc.connect(filter);
@@ -108,12 +137,13 @@ class SoftRomanticSynth {
   }
 }
 
-// Initialize on page load
+// Run on load
 const romanticPlayer = new SoftRomanticSynth();
 
 document.addEventListener('DOMContentLoaded', () => {
   createFloatingParticles();
-  
+  enableClickHearts();
+
   const musicBtn = document.getElementById('musicBtn');
   musicBtn.addEventListener('click', () => romanticPlayer.toggle());
 });
