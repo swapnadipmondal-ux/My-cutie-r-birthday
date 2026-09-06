@@ -1344,6 +1344,8 @@ document.addEventListener("click", function startLoveSongOnce() {
     document.removeEventListener("click", startLoveSongOnce);
 }, { once: true });
 </script>
-<audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+<script src="song.js"></script>
+<button onclick="window.songPlayer.start()">Play Song</button>
+<button onclick="window.songPlayer.stop()">Stop Song</button>
 </body>
 </html>
