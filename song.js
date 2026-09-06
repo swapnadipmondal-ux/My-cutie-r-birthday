@@ -1,10 +1,12 @@
-// song.js - Web Audio API Synthesizer & Sequencer
+// song.js - Soft & Light Web Audio Synthesizer
 
-class SongPlayer {
+class SoftSongPlayer {
   constructor() {
     this.audioCtx = null;
+    this.filterNode = null;
+    this.masterGain = null;
     this.isPlaying = false;
-    this.tempo = 120; // Beats per minute
+    this.tempo = 100; // Slower, relaxed tempo
     this.currentNoteIndex = 0;
     this.timerId = null;
 
@@ -28,54 +30,67 @@ class SongPlayer {
     ];
   }
 
-  // Initialize Audio Context on user action (required by browsers)
   initContext() {
     if (!this.audioCtx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       this.audioCtx = new AudioContext();
+
+      // Soft low-pass filter to remove sharp treble frequencies
+      this.filterNode = this.audioCtx.createBiquadFilter();
+      this.filterNode.type = 'lowpass';
+      this.filterNode.frequency.value = 800; // Cuts high-pitch harshness
+
+      // Master output gain set low for gentle sound level
+      this.masterGain = this.audioCtx.createGain();
+      this.masterGain.gain.value = 0.4;
+
+      // Routing: Oscillator -> Note Gain -> Filter -> Master Gain -> Speakers
+      this.filterNode.connect(this.masterGain);
+      this.masterGain.connect(this.audioCtx.destination);
     }
   }
 
-  // Play a single tone with custom envelope
   playTone(freq, duration) {
-    if (freq === 0) return; // Rest
+    if (freq === 0) return; // Rest note
 
     const osc = this.audioCtx.createOscillator();
-    const gain = this.audioCtx.createGain();
+    const noteGain = this.audioCtx.createGain();
 
-    osc.type = 'sine'; // Waveform: 'sine', 'square', 'sawtooth', 'triangle'
+    osc.type = 'sine'; // Smooth, pure waveform without harsh overtones
     osc.frequency.value = freq;
 
-    // Smooth gain envelope (Attack - Decay)
     const now = this.audioCtx.currentTime;
-    gain.gain.setValueAtTime(0.001, now);
-    gain.gain.exponentialRampToValueAtTime(0.3, now + 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + duration - 0.05);
+    const fadeTime = 0.08; // Soft attack and release
 
-    osc.connect(gain);
-    gain.connect(this.audioCtx.destination);
+    // Subtle gain curve for a smooth bell-like response
+    noteGain.gain.setValueAtTime(0.0001, now);
+    noteGain.gain.linearRampToValueAtTime(0.08, now + fadeTime);
+    noteGain.gain.exponentialRampToValueAtTime(0.0001, now + duration - 0.02);
+
+    osc.connect(noteGain);
+    noteGain.connect(this.filterNode);
 
     osc.start(now);
     osc.stop(now + duration);
   }
 
-  // Start sequence playback
   start() {
     this.initContext();
+    if (this.audioCtx.state === 'suspended') {
+      this.audioCtx.resume();
+    }
     if (this.isPlaying) return;
-    
+
     this.isPlaying = true;
     this.currentNoteIndex = 0;
     this.nextNote();
   }
 
-  // Stop playback
   stop() {
     this.isPlaying = false;
     if (this.timerId) clearTimeout(this.timerId);
   }
 
-  // Sequencer loop
   nextNote() {
     if (!this.isPlaying) return;
 
@@ -91,9 +106,9 @@ class SongPlayer {
 }
 
 // Instantiate player
-const song = new SongPlayer();
+const song = new SoftSongPlayer();
 
-// Export for module systems or global access
+// Export for module systems or global window object
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = song;
 } else {
